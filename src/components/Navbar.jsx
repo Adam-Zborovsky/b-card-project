@@ -1,14 +1,20 @@
+import { jwtDecode } from "jwt-decode";
+import { useState } from "react";
 import { Link } from "react-router-dom";
 
 function Navbar() {
+	const [userData, setUserData] = useState({});
+	const token = localStorage.getItem("token");
+	if (token) setUserData(jwtDecode(token));
+
 	return (
-		<nav class="navbar navbar-expand-lg navbar-light bg-light">
-			<div class="container-fluid">
-				<Link class="navbar-brand" to="/">
-					<h1>B-Card</h1>
+		<nav className="navbar navbar-expand-lg navbar-light bg-light">
+			<div className="container">
+				<Link className="navbar-brand" to="/">
+					<h1 style={{ textShadow: "10px black" }}>B-Card</h1>
 				</Link>
 				<button
-					class="navbar-toggler"
+					className="navbar-toggler"
 					type="button"
 					data-bs-toggle="collapse"
 					data-bs-target="#navbarNav"
@@ -16,39 +22,58 @@ function Navbar() {
 					aria-expanded="false"
 					aria-label="Toggle navigation"
 				>
-					<span class="navbar-toggler-icon"></span>
+					<span className="navbar-toggler-icon"></span>
 				</button>
-				<div class="collapse navbar-collapse" id="navbarNav">
-					<ul class="navbar-nav me-auto mb-2 mb-lg-0">
-						<li class="nav-item">
-							<Link class="nav-link" to="/">
-								Home
-							</Link>
-							<Link class="nav-link" to="/">
-								Home
-							</Link>
-							<Link class="nav-link" to="/">
-								Home
-							</Link>
-							<Link class="nav-link" to="/">
+				<div className="collapse navbar-collapse" id="navbarSupportedContent">
+					<ul className="navbar-nav me-auto mb-2 mb-lg-0">
+						<li className="nav-item active">
+							<Link className="nav-link" to="/home">
 								Home
 							</Link>
 						</li>
+						<li className="nav-item">
+							<Link className="nav-link" to="/about">
+								About
+							</Link>
+						</li>
+						<li className="nav-item">
+							<Link className="nav-link" to="/contact">
+								Contact
+							</Link>
+						</li>
+						{userData && (
+							<>
+								{userData.role === "admin" && (
+									<li className="nav-item">
+										<Link className="nav-link" to="/admin">
+											Admin
+										</Link>
+									</li>
+								)}
+								<li className="nav-item">
+									<Link className="nav-link" to="/my-cards">
+										My Cards
+									</Link>
+								</li>
+							</>
+						)}
 					</ul>
-					<form class="d-flex" role="search">
-						<input
-							class="form-control me-2"
-							type="search"
-							placeholder="Search"
-							aria-label="Search"
-						/>
-						<button class="btn btn-outline-success" type="submit">
-							Search
+					<div className="d-flex align-items-center">
+						<button className="btn btn-outline-secondary mx-2" id="themeToggle">
+							Light/Dark
 						</button>
-					</form>
-					<button class="btn btn-outline-secondary ms-2" id="themeToggle">
-						Light/Dark
-					</button>
+						<form className="d-flex" role="search">
+							<input
+								className="form-control me-2"
+								type="search"
+								placeholder="Search"
+								aria-label="Search"
+							/>
+							<button className="btn btn-outline-success" type="submit">
+								Search
+							</button>
+						</form>
+					</div>
 				</div>
 			</div>
 		</nav>
