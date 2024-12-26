@@ -5,3 +5,21 @@
 	--text-light: #000000;
 	--text-dark: #ffffff;
 }
+.search-container {
+	position: relative;
+	display: flex;
+	align-items: center;
+}
+
+.search-container .form-control {
+	width: 100%;
+	padding-right: 40px; /* Adjust this value based on the size of the button */
+}
+
+.search-container .search-btn {
+	position: absolute;
+	right: 10px; /* Adjust this value based on your design */
+	border: none;
+	background: none;
+	padding: 0;
+}

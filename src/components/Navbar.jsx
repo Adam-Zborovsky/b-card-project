@@ -1,6 +1,7 @@
 import { jwtDecode } from "jwt-decode";
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import { FaSearch } from "react-icons/fa";
 
 function Navbar() {
 	const [userData, setUserData] = useState({});
@@ -11,7 +12,9 @@ function Navbar() {
 		<nav className="navbar navbar-expand-lg navbar-light bg-light">
 			<div className="container">
 				<Link className="navbar-brand" to="/">
-					<h1 style={{ textShadow: "10px black" }}>B-Card</h1>
+					<h1 style={{ textShadow: "5px 2px 4px rgba(0, 0, 0, 0.5)" }}>
+						B-Card
+					</h1>
 				</Link>
 				<button
 					className="navbar-toggler"
@@ -33,18 +36,24 @@ function Navbar() {
 						</li>
 						{userData.id && (
 							<>
-								<Link className="nav-link" to="/favorites">
-									Favorites
-								</Link>
-								{userData.isBusiness && (
-									<Link className="nav-link" to="/my-cards">
-										My Cards
+								<li className="nav-item">
+									<Link className="nav-link" to="/favorites">
+										Favorites
 									</Link>
+								</li>
+								{userData.isBusiness && (
+									<li className="nav-item">
+										<Link className="nav-link" to="/my-cards">
+											My Cards
+										</Link>
+									</li>
 								)}
 								{userData.isAdmin && (
-									<Link className="nav-link" to="/sandbox">
-										Sandbox
-									</Link>
+									<li className="nav-item">
+										<Link className="nav-link" to="/sandbox">
+											Sandbox
+										</Link>
+									</li>
 								)}
 							</>
 						)}
@@ -53,17 +62,46 @@ function Navbar() {
 						<button className="btn btn-outline-secondary mx-2" id="themeToggle">
 							Light/Dark
 						</button>
-						<form className="d-flex" role="search">
+						<div className="search-container">
 							<input
-								className="form-control me-2"
-								type="search"
+								type="text"
+								className="form-control"
 								placeholder="Search"
-								aria-label="Search"
 							/>
-							<button className="btn btn-outline-success" type="submit">
-								Search
+							<button
+								className="btn btn-outline-success search-btn"
+								type="submit"
+							>
+								<FaSearch />
 							</button>
-						</form>
+						</div>
+						<div className="me-3">
+							{userData.id ? (
+								<>
+									<Link
+										className="btn btn-outline-primary mx-2"
+										to="/profile"
+										style={{ textTransform: "capitalize" }}
+									>
+										<img src="" alt="">
+											placeholder
+										</img>
+									</Link>
+									<Link className="btn btn-outline-danger mx-2" to="/logout">
+										Logout
+									</Link>
+								</>
+							) : (
+								<>
+									<Link className="btn btn-outline-primary mx-2" to="/login">
+										Login
+									</Link>
+									<Link className="btn btn-outline-primary mx-2" to="/register">
+										Register
+									</Link>
+								</>
+							)}
+						</div>
 					</div>
 				</div>
 			</div>
