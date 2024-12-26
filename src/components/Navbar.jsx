@@ -27,34 +27,25 @@ function Navbar() {
 				<div className="collapse navbar-collapse" id="navbarSupportedContent">
 					<ul className="navbar-nav me-auto mb-2 mb-lg-0">
 						<li className="nav-item active">
-							<Link className="nav-link" to="/home">
-								Home
-							</Link>
-						</li>
-						<li className="nav-item">
 							<Link className="nav-link" to="/about">
 								About
 							</Link>
 						</li>
-						<li className="nav-item">
-							<Link className="nav-link" to="/contact">
-								Contact
-							</Link>
-						</li>
-						{userData && (
+						{userData.id && (
 							<>
-								{userData.role === "admin" && (
-									<li className="nav-item">
-										<Link className="nav-link" to="/admin">
-											Admin
-										</Link>
-									</li>
-								)}
-								<li className="nav-item">
+								<Link className="nav-link" to="/favorites">
+									Favorites
+								</Link>
+								{userData.isBusiness && (
 									<Link className="nav-link" to="/my-cards">
 										My Cards
 									</Link>
-								</li>
+								)}
+								{userData.isAdmin && (
+									<Link className="nav-link" to="/sandbox">
+										Sandbox
+									</Link>
+								)}
 							</>
 						)}
 					</ul>
