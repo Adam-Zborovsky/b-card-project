@@ -1,10 +1,95 @@
-@import "../../node_modules/bootstrap/dist/css/bootstrap.min.css";
+/* Light Theme */
 :root {
-	--background-light: #ffffff;
-	--background-dark: #121212;
-	--text-light: #000000;
-	--text-dark: #ffffff;
+	--background: #ffffff; /* Light mode background */
+	--text: #000000; /* Light mode text color */
+	--primary: #ff6b6b;
+	--secondary: #4ecdc4;
+	--accent: #f7b731;
+	--success: #57c785;
+	--error: #ee5253;
+	--gradient: linear-gradient(90deg, #ff6b6b, #88d8b0);
 }
+
+/* Dark Theme Overrides */
+[data-theme="dark"] {
+	--background: #243447; /* Dark mode background */
+	--text: #ecf0f1; /* Dark mode text color */
+	--primary: #ff6b6b;
+	--secondary: #4ecdc4;
+	--accent: #f7b731;
+	--success: #57c785;
+	--error: #ee5253;
+	--gradient: linear-gradient(90deg, #4ecdc4, #ff6b6b);
+}
+* {
+	transition: color 0.08s ease, background-color 0.8s ease !important;
+	transition-delay: 0s !important;
+}
+
+html,
+body {
+	height: 100%;
+	background-color: var(--background);
+	color: var(--text);
+}
+
+#root {
+	min-height: 100%;
+	background-color: var(--background);
+	color: var(--text);
+}
+.navbar {
+	background-color: var(--background);
+	color: var(--text);
+}
+
+.btn-primary {
+	background-color: var(--primary);
+	border-color: var(--primary);
+	color: var(--text);
+}
+
+.btn-primary:hover {
+	background-color: var(--secondary);
+	border-color: var(--secondary);
+	color: var(--text);
+}
+
+.btn-outline-success {
+	color: var(--success);
+	border-color: var(--success);
+}
+
+.btn-outline-success:hover {
+	background-color: var(--success);
+	color: var(--text);
+}
+
+.alert-success {
+	background-color: var(--success);
+	color: var(--text);
+}
+
+.alert-warning {
+	background-color: var(--warning);
+	color: var(--text);
+}
+
+.alert-danger {
+	background-color: var(--error);
+	color: var(--text);
+}
+
+.form-control {
+	background-color: var(--background);
+	color: var(--text);
+	border: 1px solid var(--secondary) !;
+}
+
+.search-container .search-btn {
+	color: var(--primary);
+}
+
 .search-container {
 	position: relative;
 	display: flex;
@@ -13,12 +98,13 @@
 
 .search-container .form-control {
 	width: 100%;
-	padding-right: 40px; /* Adjust this value based on the size of the button */
+	padding-right: 40px;
 }
 
 .search-container .search-btn {
 	position: absolute;
-	right: 10px; /* Adjust this value based on your design */
+	right: 10px;
+	outline: none;
 	border: none;
 	background: none;
 	padding: 0;
