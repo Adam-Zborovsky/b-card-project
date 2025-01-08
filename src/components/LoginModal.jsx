@@ -59,22 +59,28 @@ const LoginModal = () => {
 				onClick={toggleModal}
 			>
 				<div
-					className="modal-dialog modal-dialog-centered"
+					className="modal-dialog modal-dialog-centered mt-5"
+					style={{
+						maxWidth: "90vw",
+						width: "400px",
+					}}
 					onClick={(e) => e.stopPropagation()}
 				>
 					<div
-						className="modal-content"
+						className="modal-content rounded-3"
 						style={{
 							backgroundColor: "var(--background)",
 							color: "var(--text)",
-							transform: "translateY(-25vh)",
 						}}
 					>
+						{/* Modal Header */}
 						<div
-							className="modal-header"
+							className="modal-header sticky-top"
 							style={{
 								backgroundColor: "var(--background)",
 								color: "var(--text)",
+								zIndex: 1050,
+								padding: "10px 15px",
 							}}
 						>
 							<h5 className="modal-title">Login</h5>
@@ -83,24 +89,26 @@ const LoginModal = () => {
 								className="btn-close"
 								onClick={toggleModal}
 								style={{
-									backgroundColor: "var(--error	)",
+									backgroundColor: "var(--error)",
 								}}
 								aria-label="Close"
 							></button>
 						</div>
+
+						{/* Modal Body */}
 						<div
-							className="modal-body"
+							className="modal-body p-4"
 							style={{
 								backgroundColor: "var(--background)",
 								color: "var(--text)",
 							}}
 						>
-							<form onSubmit={formik.handleSubmit}>
+							<form onSubmit={formik.handleSubmit} className="px-2">
 								<div className="form-group mb-3">
 									<label htmlFor="email">Email</label>
 									<input
 										type="email"
-										className={`form-control ${
+										className={`form-control w-100 ${
 											formik.touched.email && formik.errors.email
 												? "is-invalid"
 												: ""
@@ -122,11 +130,12 @@ const LoginModal = () => {
 										</div>
 									)}
 								</div>
+
 								<div className="form-group mb-3">
 									<label htmlFor="password">Password</label>
 									<input
 										type="password"
-										className={`form-control ${
+										className={`form-control w-100 ${
 											formik.touched.password && formik.errors.password
 												? "is-invalid"
 												: ""
@@ -148,9 +157,10 @@ const LoginModal = () => {
 										</div>
 									)}
 								</div>
+
 								<button
 									type="submit"
-									className="btn w-100 mb-3"
+									className="btn w-100 py-2"
 									style={{
 										backgroundColor: "var(--success)",
 										color: "var(--text)",
@@ -159,7 +169,8 @@ const LoginModal = () => {
 								>
 									Login
 								</button>
-								<div className="text-center">
+
+								<div className="text-center mt-3">
 									<Link
 										to="/register"
 										style={{
@@ -170,6 +181,13 @@ const LoginModal = () => {
 									</Link>
 								</div>
 							</form>
+						</div>
+
+						{/* Modal Footer */}
+						<div className="modal-footer border-0">
+							<button className="btn btn-secondary w-100" onClick={toggleModal}>
+								Close
+							</button>
 						</div>
 					</div>
 				</div>

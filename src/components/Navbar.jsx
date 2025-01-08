@@ -1,5 +1,4 @@
-import { jwtDecode } from "jwt-decode";
-import { useState, useEffect, useContext } from "react";
+import { useContext } from "react";
 import { Link } from "react-router-dom";
 import { FaSearch, FaMoon } from "react-icons/fa";
 import { CgProfile } from "react-icons/cg";
@@ -11,24 +10,8 @@ import LoginModal from "./LoginModal.jsx";
 import { ThemeContext } from "../context/ThemeContext.js";
 
 function Navbar() {
-	const { isAuthenticated } = useContext(AuthContext);
+	const { isAuthenticated, userData } = useContext(AuthContext);
 	const { theme, toggleTheme } = useContext(ThemeContext);
-
-	const [userData, setUserData] = useState({});
-
-	useEffect(() => {
-		if (isAuthenticated) {
-			const token = localStorage.getItem("token");
-			try {
-				const decodedToken = jwtDecode(token);
-				setUserData(decodedToken);
-			} catch (error) {
-				console.error("Invalid token:", error);
-			}
-		} else {
-			setUserData({});
-		}
-	}, [isAuthenticated]);
 
 	return (
 		<nav
@@ -61,7 +44,7 @@ function Navbar() {
 								About
 							</Link>
 						</li>
-						{userData._id && (
+						{isAuthenticated && (
 							<>
 								<li className="nav-item">
 									<Link className="nav-link" to="/favorites">
@@ -118,13 +101,16 @@ function Navbar() {
 									</Link>
 								</>
 							) : (
-								<>
+								<div className="d-flex flex-column flex-md-row">
 									<LoginModal />
 
-									<Link className="btn btn-outline-primary mx-2" to="/register">
+									<Link
+										className="btn btn-outline-primary mx-2 mt-2 mt-md-0"
+										to="/register"
+									>
 										Register
 									</Link>
-								</>
+								</div>
 							)}
 						</div>
 					</div>

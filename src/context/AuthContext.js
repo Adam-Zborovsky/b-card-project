@@ -1,30 +1,37 @@
+import { jwtDecode } from "jwt-decode";
 import { createContext, useState, useEffect } from "react";
+import { toast } from "react-toastify";
 
 export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
 	const [isAuthenticated, setIsAuthenticated] = useState(false);
+	const [userData, setUserData] = useState({});
 
-	// Check for token on app load
 	useEffect(() => {
 		const token = localStorage.getItem("token");
 		if (token) {
 			setIsAuthenticated(true);
+			setUserData(jwtDecode(token));
 		}
 	}, []);
 
 	const login = (token) => {
-		localStorage.setItem("token", token); // Save token to local storage
+		localStorage.setItem("token", token);
 		setIsAuthenticated(true);
+		setUserData(jwtDecode(token));
+		toast.success("Log in successfully");
 	};
 
 	const logout = () => {
-		localStorage.removeItem("token"); // Remove token from local storage
+		localStorage.removeItem("token");
 		setIsAuthenticated(false);
+		setUserData({});
+		toast.success("Log out successfully");
 	};
 
 	return (
-		<AuthContext.Provider value={{ isAuthenticated, login, logout }}>
+		<AuthContext.Provider value={{ isAuthenticated, userData, login, logout }}>
 			{children}
 		</AuthContext.Provider>
 	);

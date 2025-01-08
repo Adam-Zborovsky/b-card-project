@@ -2,49 +2,46 @@ import { useContext, useEffect, useState } from "react";
 import { useFormik } from "formik";
 import * as yup from "yup";
 import { getUserById, updateUser } from "../services/userService";
-import { jwtDecode } from "jwt-decode";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
 import "../styles/Profile.css";
 import ConfirmModal from "../components/confirmModal";
 
 function Profile() {
-	const { isAuthenticated, logout } = useContext(AuthContext);
-
+	const { isAuthenticated, userData, logout } = useContext(AuthContext);
 	const navigate = useNavigate();
-	const [userData, setUserData] = useState({});
+	const [fullUserData, setFullUserData] = useState({});
 	const [isEditing, setIsEditing] = useState(false);
 
 	useEffect(() => {
 		if (isAuthenticated) {
-			const userId = jwtDecode(localStorage.getItem("token"))._id;
-			getUserById(userId)
-				.then((res) => setUserData(res.data))
+			getUserById(userData._id)
+				.then((res) => setFullUserData(res.data))
 				.catch((err) => console.log(err));
 		}
-	}, [isAuthenticated]);
+	}, [isAuthenticated, userData]);
 
 	const formik = useFormik({
 		initialValues: {
 			name: {
-				first: userData.name?.first || "",
-				middle: userData.name?.middle || "",
-				last: userData.name?.last || "",
+				first: fullUserData.name?.first || "",
+				middle: fullUserData.name?.middle || "",
+				last: fullUserData.name?.last || "",
 			},
-			phone: userData.phone || "",
-			email: userData.email || "",
+			phone: fullUserData.phone || "",
+			email: fullUserData.email || "",
 			password: "",
 			image: {
-				url: userData.image?.url || "",
-				alt: userData.image?.alt || "",
+				url: fullUserData.image?.url || "",
+				alt: fullUserData.image?.alt || "",
 			},
 			address: {
-				state: userData.address?.state || "",
-				country: userData.address?.country || "",
-				city: userData.address?.city || "",
-				street: userData.address?.street || "",
-				houseNumber: userData.address?.houseNumber || "",
-				zip: userData.address?.zip || "",
+				state: fullUserData.address?.state || "",
+				country: fullUserData.address?.country || "",
+				city: fullUserData.address?.city || "",
+				street: fullUserData.address?.street || "",
+				houseNumber: fullUserData.address?.houseNumber || "",
+				zip: fullUserData.address?.zip || "",
 			},
 		},
 		enableReinitialize: true,
@@ -124,9 +121,9 @@ function Profile() {
 			}),
 		}),
 		onSubmit: (values) => {
-			updateUser(values, userData._id)
+			updateUser(values, fullUserData._id)
 				.then((res) => {
-					setUserData(res.data);
+					setFullUserData(res.data);
 					setIsEditing(false);
 				})
 				.catch((err) => console.log(err));
@@ -143,101 +140,103 @@ function Profile() {
 		<div className="profile-page">
 			<div className="profile-header">
 				<img
-					src={userData.image?.url || "https://via.placeholder.com/150"}
-					alt={userData.image?.alt || "Profile Picture"}
+					src={fullUserData.image?.url || "https://via.placeholder.com/150"}
+					alt={fullUserData.image?.alt || "Profile Picture"}
 					className="profile-picture"
 				/>
 				<h2>
-					{userData.name?.first} {userData.name?.middle && userData.name.middle}{" "}
-					{userData.name?.last}
+					{fullUserData.name?.first}{" "}
+					{fullUserData.name?.middle && fullUserData.name.middle}{" "}
+					{fullUserData.name?.last}
 				</h2>
-				<p className="profile-email">Email: {userData.email}</p>
-				<p className="profile-phone">Phone: {userData.phone}</p>
+				<p className="profile-email">Email: {fullUserData.email}</p>
+				<p className="profile-phone">Phone: {fullUserData.phone}</p>
 			</div>
 
 			{isEditing ? (
-				<form onSubmit={formik.handleSubmit} className="profile-form">
-					<h3>Edit Profile</h3>
+				<form onSubmit={formik.handleSubmit} className="register-form">
+					<h3 className="form-title">Register</h3>
 
-					{/* Name Fields */}
-					{["first", "middle", "last"].map((field) => (
-						<div key={field}>
-							<label>{`${
-								field.charAt(0).toUpperCase() + field.slice(1)
-							} Name:`}</label>
+					{/* Personal Information */}
+					<div className="form-section">
+						<h4>Personal Information</h4>
+						<div className="form-grid">
+							{["first", "middle", "last"].map((field) => (
+								<div key={field} className="form-group">
+									<label>{`${
+										field.charAt(0).toUpperCase() + field.slice(1)
+									} Name:`}</label>
+									<input
+										type="text"
+										name={`name.${field}`}
+										value={formik.values.name[field]}
+										onChange={formik.handleChange}
+										onBlur={formik.handleBlur}
+									/>
+									{formik.touched.name?.[field] &&
+										formik.errors.name?.[field] && (
+											<div className="error-message">
+												{formik.errors.name[field]}
+											</div>
+										)}
+								</div>
+							))}
+						</div>
+					</div>
+
+					{/* Contact Information */}
+					<div className="form-section">
+						<h4>Contact Information</h4>
+						<div className="form-group">
+							<label>Phone:</label>
 							<input
-								type="text"
-								name={`name.${field}`}
-								value={formik.values.name[field]}
+								type="tel"
+								name="phone"
+								value={formik.values.phone}
 								onChange={formik.handleChange}
 								onBlur={formik.handleBlur}
 							/>
-							{formik.touched.name?.[field] && formik.errors.name?.[field] && (
-								<div className="error">{formik.errors.name[field]}</div>
+							{formik.touched.phone && formik.errors.phone && (
+								<div className="error-message">{formik.errors.phone}</div>
 							)}
 						</div>
-					))}
 
-					{/* Phone */}
-					<label>Phone:</label>
-					<input
-						type="tel"
-						name="phone"
-						value={formik.values.phone}
-						onChange={formik.handleChange}
-						onBlur={formik.handleBlur}
-					/>
-					{formik.touched.phone && formik.errors.phone && (
-						<div className="error">{formik.errors.phone}</div>
-					)}
-					<label>Email:</label>
-					<input
-						type="text"
-						name="email"
-						value={formik.values.email}
-						onChange={formik.handleChange}
-						onBlur={formik.handleBlur}
-					/>
-					{formik.touched.email && formik.errors.email && (
-						<div className="error">{formik.errors.email}</div>
-					)}
-
-					<label>Password:</label>
-					<input
-						type="text"
-						name="password"
-						value={formik.values.password}
-						onChange={formik.handleChange}
-						onBlur={formik.handleBlur}
-					/>
-					{formik.touched.password && formik.errors.password && (
-						<div className="error">{formik.errors.password}</div>
-					)}
-
-					{/* Image Fields */}
-					{["url", "alt"].map((field) => (
-						<div key={field}>
-							<label>{`Image ${field === "url" ? "URL" : "Alt Text"}:`}</label>
+						<div className="form-group">
+							<label>Email:</label>
 							<input
-								type={field === "url" ? "url" : "text"}
-								name={`image.${field}`}
-								value={formik.values.image[field]}
+								type="email"
+								name="email"
+								value={formik.values.email}
 								onChange={formik.handleChange}
 								onBlur={formik.handleBlur}
 							/>
-							{formik.touched.image?.[field] &&
-								formik.errors.image?.[field] && (
-									<div className="error">{formik.errors.image[field]}</div>
-								)}
+							{formik.touched.email && formik.errors.email && (
+								<div className="error-message">{formik.errors.email}</div>
+							)}
 						</div>
-					))}
 
-					<div className="address-container">
+						<div className="form-group">
+							<label>Password:</label>
+							<input
+								type="password"
+								name="password"
+								value={formik.values.password}
+								onChange={formik.handleChange}
+								onBlur={formik.handleBlur}
+							/>
+							{formik.touched.password && formik.errors.password && (
+								<div className="error-message">{formik.errors.password}</div>
+							)}
+						</div>
+					</div>
+
+					{/* Address Section */}
+					<div className="form-section">
 						<h4>Address Details</h4>
-						<div className="address-fields">
+						<div className="form-grid">
 							{["state", "country", "city", "street", "houseNumber", "zip"].map(
 								(field) => (
-									<div key={field}>
+									<div key={field} className="form-group">
 										<label>{`${
 											field.charAt(0).toUpperCase() + field.slice(1)
 										}:`}</label>
@@ -250,7 +249,7 @@ function Profile() {
 										/>
 										{formik.touched.address?.[field] &&
 											formik.errors.address?.[field] && (
-												<div className="error">
+												<div className="error-message">
 													{formik.errors.address[field]}
 												</div>
 											)}
@@ -260,19 +259,53 @@ function Profile() {
 						</div>
 					</div>
 
+					{/* Image Section */}
+					<div className="form-section">
+						<h4>Profile Picture</h4>
+						<div className="form-grid">
+							<div className="form-group">
+								<label>Image URL:</label>
+								<input
+									type="url"
+									name="image.url"
+									value={formik.values.image.url}
+									onChange={formik.handleChange}
+									onBlur={formik.handleBlur}
+								/>
+								{formik.touched.image?.url && formik.errors.image?.url && (
+									<div className="error-message">{formik.errors.image.url}</div>
+								)}
+							</div>
+
+							<div className="form-group">
+								<label>Alt Text:</label>
+								<input
+									type="text"
+									name="image.alt"
+									value={formik.values.image.alt}
+									onChange={formik.handleChange}
+									onBlur={formik.handleBlur}
+								/>
+								{formik.touched.image?.alt && formik.errors.image?.alt && (
+									<div className="error-message">{formik.errors.image.alt}</div>
+								)}
+							</div>
+						</div>
+					</div>
+
 					{/* Buttons */}
 					<div className="form-actions">
 						<button
 							type="submit"
-							className="save-btn"
+							className="btn btn-success"
 							disabled={!(formik.dirty && formik.isValid)}
 						>
 							Save
 						</button>
-						<ConfirmModal userId={userData._id} logout={logout} />
+						<ConfirmModal userId={fullUserData._id} logout={logout} />
 						<button
 							type="button"
-							className="cancel-btn"
+							className="btn btn-danger"
 							onClick={handleEditToggle}
 						>
 							Cancel
@@ -281,10 +314,10 @@ function Profile() {
 				</form>
 			) : (
 				<div className="profile-actions">
-					<button className="edit-btn" onClick={handleEditToggle}>
+					<button className="btn btn-primary" onClick={handleEditToggle}>
 						Edit
 					</button>
-					<button className="logout-btn" onClick={handleLogout}>
+					<button className="btn btn-danger" onClick={handleLogout}>
 						Logout
 					</button>
 				</div>

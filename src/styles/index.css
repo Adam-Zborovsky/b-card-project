@@ -1,28 +1,34 @@
 /* Light Theme */
-:root {
-	--background: #ffffff; /* Light mode background */
-	--text: #000000; /* Light mode text color */
-	--primary: #ff6b6b;
-	--secondary: #4ecdc4;
-	--accent: #f7b731;
-	--success: #57c785;
-	--error: #ee5253;
-	--gradient: linear-gradient(90deg, #ff6b6b, #88d8b0);
+[data-theme="light"] {
+	--background: linear-gradient(135deg, #f0f4ff, #e5ebfb);
+	/* Soft light background */
+	--text: #2c3e50; /* Deep slate text */
+	--primary: #3498db; /* Calming blue for primary actions */
+	--secondary: #8f7bbe; /* Muted purple for secondary actions (distinct) */
+	--accent: #f1c40f; /* Warm yellow accent */
+	--success: #2ecc71; /* Vibrant green for success messages */
+	--error: #e74c3c; /* Bold red for errors */
+	--gradient: linear-gradient(90deg, #3498db, #9b59b6); /* Balanced gradient */
 }
 
 /* Dark Theme Overrides */
 [data-theme="dark"] {
-	--background: #243447; /* Dark mode background */
-	--text: #ecf0f1; /* Dark mode text color */
-	--primary: #ff6b6b;
-	--secondary: #4ecdc4;
-	--accent: #f7b731;
-	--success: #57c785;
-	--error: #ee5253;
-	--gradient: linear-gradient(90deg, #4ecdc4, #ff6b6b);
+	--background: #2c3e50; /* Deep slate for dark mode background */
+	--text: #ecf0f1; /* Light, crisp text */
+	--primary: #2980b9; /* Slightly darker blue for dark mode */
+	--secondary: #76659f; /* Darker muted purple for balance */
+	--accent: #f39c12; /* Richer yellow accent */
+	--success: #27ae60; /* Balanced green success */
+	--error: #c0392b; /* Softer red for errors */
+	--gradient: linear-gradient(
+		90deg,
+		#2980b9,
+		#8e44ad
+	); /* Muted dark gradient */
 }
+
 * {
-	transition: color 0.08s ease, background-color 0.8s ease !important;
+	transition: color 0.5s ease, background-color 0.5s ease !important;
 	transition-delay: 0s !important;
 }
 
@@ -108,4 +114,24 @@ body {
 	border: none;
 	background: none;
 	padding: 0;
+}
+
+.card {
+	transition: box-shadow 0.4s ease-in-out;
+	border-radius: 20px;
+}
+
+.card:hover {
+	transform: translateY(-10px);
+	box-shadow: 0px 10px 25px rgba(0, 0, 0, 0.2);
+}
+
+.card-btn {
+	transition: box-shadow 0.2s ease-in-out;
+	will-change: transform;
+}
+
+.card-btn:hover {
+	transform: scale(1.2);
+	box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
 }

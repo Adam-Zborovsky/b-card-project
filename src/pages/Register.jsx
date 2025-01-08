@@ -4,7 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { registerUser } from "../services/userService";
 import { useContext } from "react";
 import { AuthContext } from "../context/AuthContext";
-import "../styles/Profile.css";
+import "../styles/Register.css";
 
 function Register() {
 	const { login } = useContext(AuthContext);
@@ -12,185 +12,155 @@ function Register() {
 
 	const formik = useFormik({
 		initialValues: {
-			name: {},
+			name: { first: "", middle: "", last: "" },
 			phone: "",
 			email: "",
 			password: "",
-			image: {},
-			address: {},
+			image: { url: "", alt: "" },
+			address: {
+				state: "",
+				country: "",
+				city: "",
+				street: "",
+				houseNumber: "",
+				zip: "",
+			},
 			isBusiness: false,
 		},
-		enableReinitialize: true,
 		validationSchema: yup.object({
 			name: yup.object().shape({
-				first: yup
-					.string()
-					.min(2, "Must be at least 2 characters")
-					.max(256, "Must be less than 256 characters")
-					.required("First name is required"),
-				middle: yup
-					.string()
-					.min(2, "Must be at least 2 characters")
-					.max(256, "Must be less than 256 characters"),
-				last: yup
-					.string()
-					.min(2, "Must be at least 2 characters")
-					.max(256, "Must be less than 256 characters")
-					.required("Last name is required"),
+				first: yup.string().min(2).max(256).required("First name is required"),
+				middle: yup.string().min(2).max(256),
+				last: yup.string().min(2).max(256).required("Last name is required"),
 			}),
 			phone: yup
 				.string()
-				.matches(/^05\d{8}$/, "Must be a valid Israeli phone number")
+				.matches(/^05\d{8}$/, "Must be a valid phone number")
 				.required("Phone number is required"),
-			email: yup.string().required("Email is required").email("Invalid email"),
+			email: yup.string().email("Invalid email").required("Email is required"),
 			password: yup
 				.string()
-				.required("Password is required")
 				.min(9, "Must be at least 9 characters")
 				.matches(
 					/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*-]).{9,}$/,
 					"Password must contain uppercase, lowercase, number, and special character"
-				),
+				)
+				.required("Password is required"),
 			image: yup.object().shape({
-				url: yup
-					.string()
-					.url("Must be a valid URL")
-					.min(14, "Must be at least 14 characters"),
-				alt: yup
-					.string()
-					.min(2, "Must be at least 2 characters")
-					.max(256, "Must be less than 256 characters"),
+				url: yup.string().url("Must be a valid URL").min(14),
+				alt: yup.string().min(2).max(256),
 			}),
 			address: yup.object().shape({
-				state: yup
-					.string()
-					.min(2, "Must be at least 2 characters")
-					.max(256, "Must be less than 256 characters"),
-				country: yup
-					.string()
-					.min(2, "Must be at least 2 characters")
-					.max(256, "Must be less than 256 characters")
-					.required("Country is required"),
-				city: yup
-					.string()
-					.min(2, "Must be at least 2 characters")
-					.max(256, "Must be less than 256 characters")
-					.required("City is required"),
-				street: yup
-					.string()
-					.min(2, "Must be at least 2 characters")
-					.max(256, "Must be less than 256 characters")
-					.required("Street is required"),
+				state: yup.string().min(2).max(256),
+				country: yup.string().min(2).max(256).required("Country is required"),
+				city: yup.string().min(2).max(256).required("City is required"),
+				street: yup.string().min(2).max(256).required("Street is required"),
 				houseNumber: yup
 					.string()
-					.min(2, "Must be at least 2 characters")
-					.max(256, "Must be less than 256 characters")
+					.min(1)
+					.max(256)
 					.required("House number is required"),
-				zip: yup
-					.string()
-					.min(2, "Must be at least 2 characters")
-					.max(256, "Must be less than 256 characters")
-					.required("ZIP is required"),
+				zip: yup.string().min(2).max(256).required("ZIP is required"),
 			}),
 			isBusiness: yup.boolean(),
 		}),
 		onSubmit: (values) => {
 			registerUser(values)
 				.then((res) => {
-					console.log(res);
 					if (res.data) {
 						login(res.data);
 						navigate("/");
 					}
 				})
-				.catch((err) => console.log(err));
+				.catch((err) => console.error(err));
 		},
 	});
 
 	return (
-		<div className="profile-page">
-			<form onSubmit={formik.handleSubmit} className="profile-form">
-				<h3>Register</h3>
+		<div className="register-page">
+			<form onSubmit={formik.handleSubmit} className="register-form">
+				<h3 className="form-title">Register</h3>
 
-				{/* Name Fields */}
-				{["first", "middle", "last"].map((field) => (
-					<div key={field}>
-						<label>{`${
-							field.charAt(0).toUpperCase() + field.slice(1)
-						} Name:`}</label>
+				{/* Personal Information */}
+				<div className="form-section">
+					<h4>Personal Information</h4>
+					<div className="form-grid">
+						{["first", "middle", "last"].map((field) => (
+							<div key={field} className="form-group">
+								<label>{`${
+									field.charAt(0).toUpperCase() + field.slice(1)
+								} Name:`}</label>
+								<input
+									type="text"
+									name={`name.${field}`}
+									value={formik.values.name[field]}
+									onChange={formik.handleChange}
+									onBlur={formik.handleBlur}
+								/>
+								{formik.touched.name?.[field] &&
+									formik.errors.name?.[field] && (
+										<div className="error-message">
+											{formik.errors.name[field]}
+										</div>
+									)}
+							</div>
+						))}
+					</div>
+				</div>
+
+				{/* Contact Information */}
+				<div className="form-section">
+					<h4>Contact Information</h4>
+					<div className="form-group">
+						<label>Phone:</label>
 						<input
-							type="text"
-							name={`name.${field}`}
-							value={formik.values.name[field]}
+							type="tel"
+							name="phone"
+							value={formik.values.phone}
 							onChange={formik.handleChange}
 							onBlur={formik.handleBlur}
 						/>
-						{formik.touched.name?.[field] && formik.errors.name?.[field] && (
-							<div className="error">{formik.errors.name[field]}</div>
+						{formik.touched.phone && formik.errors.phone && (
+							<div className="error-message">{formik.errors.phone}</div>
 						)}
 					</div>
-				))}
 
-				{/* Phone */}
-				<label>Phone:</label>
-				<input
-					type="tel"
-					name="phone"
-					value={formik.values.phone}
-					onChange={formik.handleChange}
-					onBlur={formik.handleBlur}
-				/>
-				{formik.touched.phone && formik.errors.phone && (
-					<div className="error">{formik.errors.phone}</div>
-				)}
-
-				<label>Email:</label>
-				<input
-					type="text"
-					name="email"
-					value={formik.values.email}
-					onChange={formik.handleChange}
-					onBlur={formik.handleBlur}
-				/>
-				{formik.touched.email && formik.errors.email && (
-					<div className="error">{formik.errors.email}</div>
-				)}
-
-				<label>Password:</label>
-				<input
-					type="text"
-					name="password"
-					value={formik.values.password}
-					onChange={formik.handleChange}
-					onBlur={formik.handleBlur}
-				/>
-				{formik.touched.password && formik.errors.password && (
-					<div className="error">{formik.errors.password}</div>
-				)}
-
-				{/* Image Fields */}
-				{["url", "alt"].map((field) => (
-					<div key={field}>
-						<label>{`Image ${field === "url" ? "URL" : "Alt Text"}:`}</label>
+					<div className="form-group">
+						<label>Email:</label>
 						<input
-							type={field === "url" ? "url" : "text"}
-							name={`image.${field}`}
-							value={formik.values.image[field]}
+							type="email"
+							name="email"
+							value={formik.values.email}
 							onChange={formik.handleChange}
 							onBlur={formik.handleBlur}
 						/>
-						{formik.touched.image?.[field] && formik.errors.image?.[field] && (
-							<div className="error">{formik.errors.image[field]}</div>
+						{formik.touched.email && formik.errors.email && (
+							<div className="error-message">{formik.errors.email}</div>
 						)}
 					</div>
-				))}
 
-				<div className="address-container">
+					<div className="form-group">
+						<label>Password:</label>
+						<input
+							type="password"
+							name="password"
+							value={formik.values.password}
+							onChange={formik.handleChange}
+							onBlur={formik.handleBlur}
+						/>
+						{formik.touched.password && formik.errors.password && (
+							<div className="error-message">{formik.errors.password}</div>
+						)}
+					</div>
+				</div>
+
+				{/* Address Section */}
+				<div className="form-section">
 					<h4>Address Details</h4>
-					<div className="address-fields">
+					<div className="form-grid">
 						{["state", "country", "city", "street", "houseNumber", "zip"].map(
 							(field) => (
-								<div key={field}>
+								<div key={field} className="form-group">
 									<label>{`${
 										field.charAt(0).toUpperCase() + field.slice(1)
 									}:`}</label>
@@ -203,42 +173,70 @@ function Register() {
 									/>
 									{formik.touched.address?.[field] &&
 										formik.errors.address?.[field] && (
-											<div className="error">
+											<div className="error-message">
 												{formik.errors.address[field]}
 											</div>
 										)}
 								</div>
 							)
 						)}
-						<input
-							type="checkbox"
-							id="isBusiness"
-							name="isBusiness"
-							className="me-2"
-							value={formik.values.email}
-							onChange={formik.handleChange}
-							onBlur={formik.handleBlur}
-						/>
-						<label htmlFor="isBusiness">I Am A Business</label>
 					</div>
 				</div>
 
-				{/* Buttons */}
+				{/* Image Section */}
+				<div className="form-section">
+					<h4>Profile Picture</h4>
+					<div className="form-grid">
+						<div className="form-group">
+							<label>Image URL:</label>
+							<input
+								type="url"
+								name="image.url"
+								value={formik.values.image.url}
+								onChange={formik.handleChange}
+								onBlur={formik.handleBlur}
+							/>
+							{formik.touched.image?.url && formik.errors.image?.url && (
+								<div className="error-message">{formik.errors.image.url}</div>
+							)}
+						</div>
+
+						<div className="form-group">
+							<label>Alt Text:</label>
+							<input
+								type="text"
+								name="image.alt"
+								value={formik.values.image.alt}
+								onChange={formik.handleChange}
+								onBlur={formik.handleBlur}
+							/>
+							{formik.touched.image?.alt && formik.errors.image?.alt && (
+								<div className="error-message">{formik.errors.image.alt}</div>
+							)}
+						</div>
+					</div>
+				</div>
+
+				{/* Business Checkbox */}
+				<div className="form-section">
+					<input
+						type="checkbox"
+						className="ms-3"
+						id="isBusiness"
+						name="isBusiness"
+						checked={formik.values.isBusiness}
+						onChange={formik.handleChange}
+						onBlur={formik.handleBlur}
+					/>
+					<label htmlFor="isBusiness">I Am A Business</label>
+				</div>
+
+				{/* Submit Button */}
 				<div className="form-actions">
-					<button
-						type="submit"
-						className="save-btn"
-						disabled={!(formik.dirty && formik.isValid)}
-					>
+					<button type="submit" disabled={!(formik.dirty && formik.isValid)}>
 						Register
 					</button>
-
-					<Link
-						to="/login"
-						style={{
-							color: "var(--secondary)",
-						}}
-					>
+					<Link to="/login" className="secondary-link">
 						Already have an account? Login
 					</Link>
 				</div>
