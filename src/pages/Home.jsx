@@ -1,9 +1,11 @@
 import { useState, useEffect, useContext } from "react";
-import { FaHeart, FaEdit, FaPhone } from "react-icons/fa";
+import { FaHeart, FaPhone, FaTrash } from "react-icons/fa";
 import { getAllCards } from "../services/cardService";
 import { ThemeContext } from "../context/ThemeContext";
+import { AuthContext } from "../context/AuthContext";
 
 function Home() {
+	const { isAuthenticated, userData } = useContext(AuthContext);
 	const [cards, setCards] = useState([]);
 	const { theme } = useContext(ThemeContext);
 
@@ -63,17 +65,21 @@ function Home() {
 									background: theme === "dark" ? "#34495e" : "#f8f9fa",
 								}}
 							>
-								<button className="btn btn-outline-primary rounded-circle">
-									<FaEdit />
-								</button>
+								{userData.isAdmin && (
+									<button className="btn btn-outline-primary rounded-circle">
+										<FaTrash />
+									</button>
+								)}
 
-								<div>
-									<button className="card-btn btn btn-outline-primary rounded-circle">
+								<div className="ms-auto d-flex">
+									<button className="card-btn btn btn-outline-primary rounded-circle mx-2">
 										<FaPhone />
 									</button>
-									<button className="card-btn btn btn-outline-danger rounded-circle">
-										<FaHeart />
-									</button>
+									{isAuthenticated && (
+										<button className="card-btn btn btn-outline-danger rounded-circle">
+											<FaHeart />
+										</button>
+									)}
 								</div>
 							</div>
 						</div>

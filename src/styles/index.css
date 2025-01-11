@@ -1,44 +1,30 @@
 /* Light Theme */
 [data-theme="light"] {
 	--background: linear-gradient(135deg, #f0f4ff, #e5ebfb);
-	/* Soft light background */
-	--text: #2c3e50; /* Deep slate text */
-	--primary: #3498db; /* Calming blue for primary actions */
-	--secondary: #8f7bbe; /* Muted purple for secondary actions (distinct) */
-	--accent: #f1c40f; /* Warm yellow accent */
-	--success: #2ecc71; /* Vibrant green for success messages */
-	--error: #e74c3c; /* Bold red for errors */
-	--gradient: linear-gradient(90deg, #3498db, #9b59b6); /* Balanced gradient */
+	--text: #2c3e50;
+	--primary: #3498db;
+	--secondary: #8f7bbe;
+	--accent: #f1c40f;
+	--success: #2ecc71;
+	--error: #e74c3c;
+	--gradient: linear-gradient(90deg, #3498db, #9b59b6);
 }
 
-/* Dark Theme Overrides */
 [data-theme="dark"] {
-	--background: #2c3e50; /* Deep slate for dark mode background */
-	--text: #ecf0f1; /* Light, crisp text */
-	--primary: #2980b9; /* Slightly darker blue for dark mode */
-	--secondary: #76659f; /* Darker muted purple for balance */
-	--accent: #f39c12; /* Richer yellow accent */
-	--success: #27ae60; /* Balanced green success */
-	--error: #c0392b; /* Softer red for errors */
-	--gradient: linear-gradient(
-		90deg,
-		#2980b9,
-		#8e44ad
-	); /* Muted dark gradient */
+	--background: #2c3e50;
+	--text: #ecf0f1;
+	--primary: #2980b9;
+	--secondary: #76659f;
+	--success: #27ae60;
+	--error: #c0392b;
+	--gradient: linear-gradient(90deg, #2980b9, #8e44ad);
 }
-
-* {
-	transition: color 0.5s ease, background-color 0.5s ease !important;
-	transition-delay: 0s !important;
-}
-
-html,
-body {
+body,
+html {
 	height: 100%;
 	background-color: var(--background);
 	color: var(--text);
 }
-
 #root {
 	min-height: 100%;
 	background-color: var(--background);
@@ -117,7 +103,6 @@ body {
 }
 
 .card {
-	transition: box-shadow 0.4s ease-in-out;
 	border-radius: 20px;
 }
 

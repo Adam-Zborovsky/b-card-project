@@ -9,7 +9,6 @@ const LoginModal = () => {
 	const { login } = useContext(AuthContext);
 	const navigate = useNavigate();
 	const [isModalOpen, setIsModalOpen] = useState(false);
-
 	const toggleModal = () => setIsModalOpen(!isModalOpen);
 
 	const formik = useFormik({

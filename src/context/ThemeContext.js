@@ -4,26 +4,19 @@ export const ThemeContext = createContext();
 
 export const ThemeProvider = ({ children }) => {
 	const [theme, setTheme] = useState(() => {
-		const initialTheme = localStorage.getItem("theme") || "light";
-
-		const style = document.createElement("style");
-		style.innerHTML = `* { transition: none !important; }`;
-		document.head.appendChild(style);
-
-		document.documentElement.setAttribute("data-theme", initialTheme);
-		localStorage.setItem("theme", initialTheme);
-
-		setTimeout(() => {
-			style.parentNode.removeChild(style);
-		}, 0);
-
-		return initialTheme === "light" ? "light" : "dark";
+		return localStorage.getItem("theme") || "light";
 	});
 
 	const toggleTheme = () => {
 		const newTheme = theme === "light" ? "dark" : "light";
-		setTheme(newTheme);
-		localStorage.setItem("theme", newTheme);
+
+		// Delay applying the new theme slightly to let CSS transition kick in
+		document.documentElement.classList.add("theme-fade");
+		setTimeout(() => {
+			setTheme(newTheme);
+			localStorage.setItem("theme", newTheme);
+			document.documentElement.classList.remove("theme-fade");
+		}, 50); // Small delay ensures smoother transition
 	};
 
 	useEffect(() => {
