@@ -10,13 +10,12 @@ export const ThemeProvider = ({ children }) => {
 	const toggleTheme = () => {
 		const newTheme = theme === "light" ? "dark" : "light";
 
-		// Delay applying the new theme slightly to let CSS transition kick in
 		document.documentElement.classList.add("theme-fade");
 		setTimeout(() => {
 			setTheme(newTheme);
 			localStorage.setItem("theme", newTheme);
 			document.documentElement.classList.remove("theme-fade");
-		}, 50); // Small delay ensures smoother transition
+		}, 50);
 	};
 
 	useEffect(() => {

@@ -1,15 +1,22 @@
-import React, { useContext, useState } from "react";
+import { useContext, useState } from "react";
 import { useFormik } from "formik";
 import * as yup from "yup";
 import { Link, useNavigate } from "react-router-dom";
 import { loginUser } from "../services/userService";
 import { AuthContext } from "../context/AuthContext";
+import { ThemeContext } from "../context/ThemeContext";
+import { toast } from "react-toastify";
 
 const LoginModal = () => {
 	const { login } = useContext(AuthContext);
+	const { theme } = useContext(ThemeContext); // Access theme context
 	const navigate = useNavigate();
 	const [isModalOpen, setIsModalOpen] = useState(false);
-	const toggleModal = () => setIsModalOpen(!isModalOpen);
+
+	const toggleModal = () => {
+		setIsModalOpen(!isModalOpen);
+		formik.resetForm();
+	};
 
 	const formik = useFormik({
 		initialValues: {
@@ -36,161 +43,172 @@ const LoginModal = () => {
 						navigate("/");
 					}
 				})
-				.catch((err) => console.log(err));
+				.catch((err) => toast.error(err.response.data));
 		},
 	});
 
 	return (
 		<div>
-			{/* Button to Trigger Modal */}
-			<button className="btn btn-outline-primary mx-2" onClick={toggleModal}>
+			{/* Trigger Button */}
+			<button
+				className="btn btn-outline-primary mx-2"
+				onClick={toggleModal}
+				style={{
+					backgroundColor: theme === "dark" ? "#34495e" : "#e3f2fd",
+					color: theme === "dark" ? "#ecf0f1" : "#2c3e50",
+				}}
+			>
 				Login
 			</button>
 
 			{/* Modal */}
-			<div
-				className={`modal fade ${isModalOpen ? "show d-block" : ""}`}
-				tabIndex="-1"
-				style={{
-					backgroundColor: "rgba(0, 0, 0, 0.5)",
-					color: "var(--text)",
-				}}
-				onClick={toggleModal}
-			>
+			{isModalOpen && (
 				<div
-					className="modal-dialog modal-dialog-centered mt-5"
+					className="modal fade show d-block"
+					tabIndex="-1"
 					style={{
-						maxWidth: "90vw",
-						width: "400px",
+						backgroundColor: "rgba(0, 0, 0, 0.5)",
+						display: "flex",
+						alignItems: "center",
+						justifyContent: "center",
+						zIndex: 1050,
 					}}
-					onClick={(e) => e.stopPropagation()}
+					onClick={toggleModal}
 				>
 					<div
-						className="modal-content rounded-3"
+						className="modal-dialog modal-dialog-centered"
 						style={{
-							backgroundColor: "var(--background)",
-							color: "var(--text)",
+							maxWidth: "400px",
+							width: "90%",
 						}}
+						onClick={(e) => e.stopPropagation()} // Prevent closing modal on inner click
 					>
-						{/* Modal Header */}
 						<div
-							className="modal-header sticky-top"
-							style={{
-								backgroundColor: "var(--background)",
-								color: "var(--text)",
-								zIndex: 1050,
-								padding: "10px 15px",
-							}}
+							className={`modal-content rounded-3 ${
+								theme === "dark" ? "bg-dark text-light" : "bg-light text-dark"
+							}`}
 						>
-							<h5 className="modal-title">Login</h5>
-							<button
-								type="button"
-								className="btn-close"
-								onClick={toggleModal}
-								style={{
-									backgroundColor: "var(--error)",
-								}}
-								aria-label="Close"
-							></button>
-						</div>
-
-						{/* Modal Body */}
-						<div
-							className="modal-body p-4"
-							style={{
-								backgroundColor: "var(--background)",
-								color: "var(--text)",
-							}}
-						>
-							<form onSubmit={formik.handleSubmit} className="px-2">
-								<div className="form-group mb-3">
-									<label htmlFor="email">Email</label>
-									<input
-										type="email"
-										className={`form-control w-100 ${
-											formik.touched.email && formik.errors.email
-												? "is-invalid"
-												: ""
-										}`}
-										id="email"
-										placeholder="name@example.com"
-										value={formik.values.email}
-										onChange={formik.handleChange}
-										onBlur={formik.handleBlur}
-										style={{
-											backgroundColor: "var(--background)",
-											color: "var(--text)",
-											borderColor: "var(--secondary)",
-										}}
-									/>
-									{formik.touched.email && formik.errors.email && (
-										<div className="invalid-feedback">
-											{formik.errors.email}
-										</div>
-									)}
-								</div>
-
-								<div className="form-group mb-3">
-									<label htmlFor="password">Password</label>
-									<input
-										type="password"
-										className={`form-control w-100 ${
-											formik.touched.password && formik.errors.password
-												? "is-invalid"
-												: ""
-										}`}
-										id="password"
-										placeholder="Password"
-										value={formik.values.password}
-										onChange={formik.handleChange}
-										onBlur={formik.handleBlur}
-										style={{
-											backgroundColor: "var(--background)",
-											color: "var(--text)",
-											borderColor: "var(--secondary)",
-										}}
-									/>
-									{formik.touched.password && formik.errors.password && (
-										<div className="invalid-feedback">
-											{formik.errors.password}
-										</div>
-									)}
-								</div>
-
+							{/* Modal Header */}
+							<div className="modal-header">
+								<h5 className="modal-title">Login</h5>
 								<button
-									type="submit"
-									className="btn w-100 py-2"
+									type="button"
+									className="btn-close"
+									onClick={toggleModal}
+									aria-label="Close"
 									style={{
-										backgroundColor: "var(--success)",
-										color: "var(--text)",
+										backgroundColor: theme === "dark" ? "#c0392b" : "#e74c3c",
 									}}
-									disabled={!formik.dirty || !formik.isValid}
-								>
-									Login
-								</button>
+								></button>
+							</div>
 
-								<div className="text-center mt-3">
-									<Link
-										to="/register"
+							{/* Modal Body */}
+							<div className="modal-body p-4">
+								<form onSubmit={formik.handleSubmit}>
+									{/* Email Field */}
+									<div className="mb-3">
+										<label htmlFor="email" className="form-label">
+											Email
+										</label>
+										<input
+											id="email"
+											name="email"
+											type="email"
+											className={`form-control ${
+												formik.touched.email && formik.errors.email
+													? "is-invalid"
+													: ""
+											}`}
+											placeholder="name@example.com"
+											value={formik.values.email}
+											onChange={formik.handleChange}
+											onBlur={formik.handleBlur}
+											style={{
+												backgroundColor:
+													theme === "dark" ? "#2c3e50" : "#ffffff",
+												color: theme === "dark" ? "#ecf0f1" : "#2c3e50",
+												borderColor: theme === "dark" ? "#76659f" : "#8f7bbe",
+											}}
+										/>
+										{formik.touched.email && formik.errors.email && (
+											<div className="invalid-feedback">
+												{formik.errors.email}
+											</div>
+										)}
+									</div>
+
+									{/* Password Field */}
+									<div className="mb-3">
+										<label htmlFor="password" className="form-label">
+											Password
+										</label>
+										<input
+											id="password"
+											name="password"
+											type="password"
+											className={`form-control ${
+												formik.touched.password && formik.errors.password
+													? "is-invalid"
+													: ""
+											}`}
+											placeholder="Password"
+											value={formik.values.password}
+											onChange={formik.handleChange}
+											onBlur={formik.handleBlur}
+											style={{
+												backgroundColor:
+													theme === "dark" ? "#2c3e50" : "#ffffff",
+												color: theme === "dark" ? "#ecf0f1" : "#2c3e50",
+												borderColor: theme === "dark" ? "#76659f" : "#8f7bbe",
+											}}
+										/>
+										{formik.touched.password && formik.errors.password && (
+											<div className="invalid-feedback">
+												{formik.errors.password}
+											</div>
+										)}
+									</div>
+
+									{/* Submit Button */}
+									<button
+										type="submit"
+										className="btn w-100 py-2"
 										style={{
-											color: "var(--secondary)",
+											backgroundColor: theme === "dark" ? "#3498db" : "#2980b9",
+											color: "#ffffff",
 										}}
+										disabled={!formik.dirty || !formik.isValid}
 									>
-										New User? Register Now!
-									</Link>
-								</div>
-							</form>
-						</div>
+										Login
+									</button>
 
-						{/* Modal Footer */}
-						<div className="modal-footer border-0">
-							<button className="btn btn-secondary w-100" onClick={toggleModal}>
-								Close
-							</button>
+									{/* Register Link */}
+									<div className="text-center mt-3">
+										<Link
+											to="/register"
+											style={{
+												color: theme === "dark" ? "#8f7bbe" : "#3498db",
+											}}
+										>
+											New User? Register Now!
+										</Link>
+									</div>
+								</form>
+							</div>
+
+							{/* Modal Footer */}
+							<div className="modal-footer border-0">
+								<button
+									className="btn btn-secondary w-100"
+									onClick={toggleModal}
+								>
+									Close
+								</button>
+							</div>
 						</div>
 					</div>
 				</div>
-			</div>
+			)}
 		</div>
 	);
 };

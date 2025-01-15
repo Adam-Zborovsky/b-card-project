@@ -1,12 +1,12 @@
 import axios from "axios";
 
-const apiURL = "https://monkfish-app-z9uza.ondigitalocean.app/bcard2/users";
+const apiURL = "https://monkfish-app-z9uza.ondigitalocean.app/bcard2/users/";
 
 export function loginUser(user) {
 	let config = {
 		method: "post",
 		maxBodyLength: Infinity,
-		url: apiURL + "/login",
+		url: apiURL + "login",
 		headers: {
 			"Content-Type": "application/json",
 		},
@@ -35,7 +35,7 @@ export function registerUser(user) {
 				let loginConfig = {
 					method: "post",
 					maxBodyLength: Infinity,
-					url: apiURL + "/login",
+					url: apiURL + "login",
 					headers: {
 						"Content-Type": "application/json",
 					},
@@ -57,7 +57,7 @@ export function getUserById(id) {
 	let config = {
 		method: "get",
 		maxBodyLength: Infinity,
-		url: apiURL + "/" + id,
+		url: apiURL + id,
 		headers: {
 			"x-auth-token": localStorage.getItem("token"),
 		},
@@ -81,7 +81,7 @@ export function updateUser(user, id) {
 	let config = {
 		method: "put",
 		maxBodyLength: Infinity,
-		url: apiURL + "/" + id,
+		url: apiURL + id,
 		headers: {
 			"x-auth-token": localStorage.getItem("token"),
 		},
@@ -94,7 +94,7 @@ export function deleteUser(id) {
 	let config = {
 		method: "delete",
 		maxBodyLength: Infinity,
-		url: apiURL + "/" + id,
+		url: apiURL + id,
 		headers: {
 			"x-auth-token": localStorage.getItem("token"),
 		},

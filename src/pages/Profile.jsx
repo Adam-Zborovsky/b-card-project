@@ -1,15 +1,17 @@
 import { useContext, useEffect, useState } from "react";
 import { useFormik } from "formik";
 import * as yup from "yup";
-import { getUserById, updateUser } from "../services/userService";
+import { deleteUser, getUserById, updateUser } from "../services/userService";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
 import "../styles/Profile.css";
 import ConfirmModal from "../components/confirmModal";
+import { toast } from "react-toastify";
 
 function Profile() {
 	const { isAuthenticated, userData, logout } = useContext(AuthContext);
 	const navigate = useNavigate();
+	const [showConfDelete, setShowConfDelete] = useState(false);
 	const [fullUserData, setFullUserData] = useState({});
 	const [isEditing, setIsEditing] = useState(false);
 
@@ -126,7 +128,7 @@ function Profile() {
 					setFullUserData(res.data);
 					setIsEditing(false);
 				})
-				.catch((err) => console.log(err));
+				.catch((err) => toast.error(err.response.data));
 		},
 	});
 
@@ -135,107 +137,122 @@ function Profile() {
 		logout();
 		navigate("/");
 	};
+	const handleDeleteUser = () => {
+		deleteUser(userData._id)
+			.then(() => {
+				logout();
+				navigate("/");
+			})
+			.catch((err) => toast.error(err.response.data));
+	};
 
 	return (
-		<div className="profile-page">
-			<div className="profile-header">
-				<img
-					src={fullUserData.image?.url || "https://via.placeholder.com/150"}
-					alt={fullUserData.image?.alt || "Profile Picture"}
-					className="profile-picture"
-				/>
-				<h2>
-					{fullUserData.name?.first}{" "}
-					{fullUserData.name?.middle && fullUserData.name.middle}{" "}
-					{fullUserData.name?.last}
-				</h2>
-				<p className="profile-email">Email: {fullUserData.email}</p>
-				<p className="profile-phone">Phone: {fullUserData.phone}</p>
-			</div>
+		<>
+			<div className="profile-page">
+				<div className="profile-header">
+					<img
+						src={fullUserData.image?.url || "https://via.placeholder.com/150"}
+						alt={fullUserData.image?.alt || "Profile Picture"}
+						className="profile-picture"
+					/>
+					<h2>
+						{fullUserData.name?.first}{" "}
+						{fullUserData.name?.middle && fullUserData.name.middle}{" "}
+						{fullUserData.name?.last}
+					</h2>
+					<p className="profile-email">Email: {fullUserData.email}</p>
+					<p className="profile-phone">Phone: {fullUserData.phone}</p>
+				</div>
 
-			{isEditing ? (
-				<form onSubmit={formik.handleSubmit} className="register-form">
-					<h3 className="form-title">Register</h3>
+				{isEditing ? (
+					<form onSubmit={formik.handleSubmit} className="register-form">
+						<h3 className="form-title">Register</h3>
 
-					{/* Personal Information */}
-					<div className="form-section">
-						<h4>Personal Information</h4>
-						<div className="form-grid">
-							{["first", "middle", "last"].map((field) => (
-								<div key={field} className="form-group">
-									<label>{`${
-										field.charAt(0).toUpperCase() + field.slice(1)
-									} Name:`}</label>
-									<input
-										type="text"
-										name={`name.${field}`}
-										value={formik.values.name[field]}
-										onChange={formik.handleChange}
-										onBlur={formik.handleBlur}
-									/>
-									{formik.touched.name?.[field] &&
-										formik.errors.name?.[field] && (
-											<div className="error-message">
-												{formik.errors.name[field]}
-											</div>
-										)}
-								</div>
-							))}
-						</div>
-					</div>
-
-					{/* Contact Information */}
-					<div className="form-section">
-						<h4>Contact Information</h4>
-						<div className="form-group">
-							<label>Phone:</label>
-							<input
-								type="tel"
-								name="phone"
-								value={formik.values.phone}
-								onChange={formik.handleChange}
-								onBlur={formik.handleBlur}
-							/>
-							{formik.touched.phone && formik.errors.phone && (
-								<div className="error-message">{formik.errors.phone}</div>
-							)}
+						{/* Personal Information */}
+						<div className="form-section">
+							<h4>Personal Information</h4>
+							<div className="form-grid">
+								{["first", "middle", "last"].map((field) => (
+									<div key={field} className="form-group">
+										<label>{`${
+											field.charAt(0).toUpperCase() + field.slice(1)
+										} Name:`}</label>
+										<input
+											type="text"
+											name={`name.${field}`}
+											value={formik.values.name[field]}
+											onChange={formik.handleChange}
+											onBlur={formik.handleBlur}
+										/>
+										{formik.touched.name?.[field] &&
+											formik.errors.name?.[field] && (
+												<div className="error-message">
+													{formik.errors.name[field]}
+												</div>
+											)}
+									</div>
+								))}
+							</div>
 						</div>
 
-						<div className="form-group">
-							<label>Email:</label>
-							<input
-								type="email"
-								name="email"
-								value={formik.values.email}
-								onChange={formik.handleChange}
-								onBlur={formik.handleBlur}
-							/>
-							{formik.touched.email && formik.errors.email && (
-								<div className="error-message">{formik.errors.email}</div>
-							)}
+						{/* Contact Information */}
+						<div className="form-section">
+							<h4>Contact Information</h4>
+							<div className="form-group">
+								<label>Phone:</label>
+								<input
+									type="tel"
+									name="phone"
+									value={formik.values.phone}
+									onChange={formik.handleChange}
+									onBlur={formik.handleBlur}
+								/>
+								{formik.touched.phone && formik.errors.phone && (
+									<div className="error-message">{formik.errors.phone}</div>
+								)}
+							</div>
+
+							<div className="form-group">
+								<label>Email:</label>
+								<input
+									type="email"
+									name="email"
+									value={formik.values.email}
+									onChange={formik.handleChange}
+									onBlur={formik.handleBlur}
+								/>
+								{formik.touched.email && formik.errors.email && (
+									<div className="error-message">{formik.errors.email}</div>
+								)}
+							</div>
+
+							<div className="form-group">
+								<label>Password:</label>
+								<input
+									type="password"
+									name="password"
+									value={formik.values.password}
+									onChange={formik.handleChange}
+									onBlur={formik.handleBlur}
+								/>
+								{formik.touched.password && formik.errors.password && (
+									<div className="error-message">{formik.errors.password}</div>
+								)}
+							</div>
 						</div>
 
-						<div className="form-group">
-							<label>Password:</label>
-							<input
-								type="password"
-								name="password"
-								value={formik.values.password}
-								onChange={formik.handleChange}
-								onBlur={formik.handleBlur}
-							/>
-							{formik.touched.password && formik.errors.password && (
-								<div className="error-message">{formik.errors.password}</div>
-							)}
-						</div>
-					</div>
-
-					{/* Address Section */}
-					<div className="form-section">
-						<h4>Address Details</h4>
-						<div className="form-grid">
-							{["state", "country", "city", "street", "houseNumber", "zip"].map(
-								(field) => (
+						{/* Address Section */}
+						<div className="form-section">
+							<h4>Address Details</h4>
+							<div className="form-grid">
+								{[
+									"state",
+									"country",
+									"city",
+									"street",
+									"houseNumber",
+									"zip",
+								].map((field) => (
 									<div key={field} className="form-group">
 										<label>{`${
 											field.charAt(0).toUpperCase() + field.slice(1)
@@ -254,75 +271,91 @@ function Profile() {
 												</div>
 											)}
 									</div>
-								)
-							)}
-						</div>
-					</div>
-
-					{/* Image Section */}
-					<div className="form-section">
-						<h4>Profile Picture</h4>
-						<div className="form-grid">
-							<div className="form-group">
-								<label>Image URL:</label>
-								<input
-									type="url"
-									name="image.url"
-									value={formik.values.image.url}
-									onChange={formik.handleChange}
-									onBlur={formik.handleBlur}
-								/>
-								{formik.touched.image?.url && formik.errors.image?.url && (
-									<div className="error-message">{formik.errors.image.url}</div>
-								)}
-							</div>
-
-							<div className="form-group">
-								<label>Alt Text:</label>
-								<input
-									type="text"
-									name="image.alt"
-									value={formik.values.image.alt}
-									onChange={formik.handleChange}
-									onBlur={formik.handleBlur}
-								/>
-								{formik.touched.image?.alt && formik.errors.image?.alt && (
-									<div className="error-message">{formik.errors.image.alt}</div>
-								)}
+								))}
 							</div>
 						</div>
-					</div>
 
-					{/* Buttons */}
-					<div className="form-actions">
-						<button
-							type="submit"
-							className="btn btn-success"
-							disabled={!(formik.dirty && formik.isValid)}
-						>
-							Save
+						{/* Image Section */}
+						<div className="form-section">
+							<h4>Profile Picture</h4>
+							<div className="form-grid">
+								<div className="form-group">
+									<label>Image URL:</label>
+									<input
+										type="url"
+										name="image.url"
+										value={formik.values.image.url}
+										onChange={formik.handleChange}
+										onBlur={formik.handleBlur}
+									/>
+									{formik.touched.image?.url && formik.errors.image?.url && (
+										<div className="error-message">
+											{formik.errors.image.url}
+										</div>
+									)}
+								</div>
+
+								<div className="form-group">
+									<label>Alt Text:</label>
+									<input
+										type="text"
+										name="image.alt"
+										value={formik.values.image.alt}
+										onChange={formik.handleChange}
+										onBlur={formik.handleBlur}
+									/>
+									{formik.touched.image?.alt && formik.errors.image?.alt && (
+										<div className="error-message">
+											{formik.errors.image.alt}
+										</div>
+									)}
+								</div>
+							</div>
+						</div>
+
+						{/* Buttons */}
+						<div className="form-actions d-flex flex-row">
+							<button
+								type="submit"
+								className="btn btn-success"
+								disabled={!(formik.dirty && formik.isValid)}
+							>
+								Save
+							</button>
+							<button
+								className="btn btn-dark"
+								onClick={() => setShowConfDelete(true)}
+							>
+								Delete Account
+							</button>
+							<button
+								type="button"
+								className="btn btn-danger"
+								onClick={handleEditToggle}
+							>
+								Cancel
+							</button>
+						</div>
+					</form>
+				) : (
+					<div className="profile-actions">
+						<button className="btn btn-primary" onClick={handleEditToggle}>
+							Edit
 						</button>
-						<ConfirmModal userId={fullUserData._id} logout={logout} />
-						<button
-							type="button"
-							className="btn btn-danger"
-							onClick={handleEditToggle}
-						>
-							Cancel
+						<button className="btn btn-danger" onClick={handleLogout}>
+							Logout
 						</button>
 					</div>
-				</form>
-			) : (
-				<div className="profile-actions">
-					<button className="btn btn-primary" onClick={handleEditToggle}>
-						Edit
-					</button>
-					<button className="btn btn-danger" onClick={handleLogout}>
-						Logout
-					</button>
-				</div>
-			)}
-		</div>
+				)}
+			</div>
+			<ConfirmModal
+				isOpen={showConfDelete}
+				onClose={() => setShowConfDelete(false)}
+				action={handleDeleteUser}
+				title="Confirm Deletion"
+				message="Are you sure you want to delete your account?"
+			/>
+		</>
 	);
 }
 

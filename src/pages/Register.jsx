@@ -5,6 +5,7 @@ import { registerUser } from "../services/userService";
 import { useContext } from "react";
 import { AuthContext } from "../context/AuthContext";
 import "../styles/Register.css";
+import { toast } from "react-toastify";
 
 function Register() {
 	const { login } = useContext(AuthContext);
@@ -72,7 +73,7 @@ function Register() {
 						navigate("/");
 					}
 				})
-				.catch((err) => console.error(err));
+				.catch((err) => toast.error(err.response.data));
 		},
 	});
 

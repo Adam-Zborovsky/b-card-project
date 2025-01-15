@@ -1,42 +1,28 @@
-import { useContext, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { deleteUser } from "../services/userService";
-import "../styles/index.css";
+import { useContext } from "react";
 import { ThemeContext } from "../context/ThemeContext";
+import "../styles/index.css";
 
-const ConfirmModal = ({ userId, logout }) => {
-	const navigate = useNavigate();
-	const [isModalOpen, setIsModalOpen] = useState(false);
+function ConfirmModal({
+	action,
+	title = "Confirm Action",
+	message = "Are you sure?",
+	isOpen,
+	onClose,
+}) {
 	const { theme } = useContext(ThemeContext);
-	const toggleModal = () => setIsModalOpen(!isModalOpen);
-
-	const handleDelete = () => {
-		deleteUser(userId)
-			.then(() => {
-				logout();
-				navigate("/");
-			})
-			.catch((err) => console.log(err));
-	};
 
 	return (
 		<div>
-			{/* Button to Trigger Delete Confirmation */}
-			<button className="btn btn-dark" onClick={toggleModal}>
-				Delete Account
-			</button>
-
-			{/* Confirmation Modal */}
-			{isModalOpen && (
+			{isOpen && (
 				<div
 					className="modal fade show d-block"
 					tabIndex="-1"
 					style={{ backgroundColor: "rgba(0, 0, 0, 0.5)" }}
-					onClick={toggleModal}
+					onClick={onClose}
 				>
 					<div
 						className="modal-dialog modal-dialog-centered"
-						onClick={(e) => e.stopPropagation()} // Prevent closing modal on inside click
+						onClick={(e) => e.stopPropagation()}
 					>
 						<div
 							className={`modal-content ${
@@ -44,29 +30,29 @@ const ConfirmModal = ({ userId, logout }) => {
 							}`}
 						>
 							<div className="modal-header">
-								<h5 className="modal-title">Confirm Deletion</h5>
+								<h5 className="modal-title">{title}</h5>
 								<button
 									type="button"
 									className="btn-close"
-									onClick={toggleModal}
+									onClick={onClose}
 									aria-label="Close"
 								></button>
 							</div>
 							<div className="modal-body">
-								<p>Are you sure you want to delete your account?</p>
+								<p>{message}</p>
 							</div>
 							<div className="modal-footer">
-								<button className="btn btn-danger" onClick={toggleModal}>
+								<button className="btn btn-secondary" onClick={onClose}>
 									Cancel
 								</button>
 								<button
-									className="btn btn-dark"
+									className="btn btn-danger"
 									onClick={() => {
-										handleDelete();
-										toggleModal();
+										action();
+										onClose();
 									}}
 								>
-									Delete
+									Confirm
 								</button>
 							</div>
 						</div>
@@ -75,6 +61,6 @@ const ConfirmModal = ({ userId, logout }) => {
 			)}
 		</div>
 	);
-};
+}
 
 export default ConfirmModal;
