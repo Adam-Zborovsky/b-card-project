@@ -10,6 +10,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Home from "./pages/Home";
 import MyCards from "./pages/MyCards";
 import Favorites from "./pages/Favorites";
+import Footer from "./components/Footer";
 
 function App() {
 	return (
@@ -49,6 +50,7 @@ function App() {
 							}
 						/>
 					</Routes>
+					<Footer />
 				</Router>
 			</ThemeProvider>
 		</AuthProvider>
