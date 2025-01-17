@@ -83,7 +83,10 @@ function Home() {
 									}}
 								>
 									{userData.isAdmin && (
-										<button className="btn btn-outline-primary rounded-circle">
+										<button
+											className="btn btn-outline-primary rounded-circle"
+											style={{ maxWidth: "40px" }}
+										>
 											<FaTrash />
 										</button>
 									)}

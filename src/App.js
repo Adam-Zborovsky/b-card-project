@@ -10,7 +10,11 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Home from "./pages/Home";
 import MyCards from "./pages/MyCards";
 import Favorites from "./pages/Favorites";
+<<<<<<< HEAD
 import About from "./pages/About";
+=======
+import Footer from "./components/Footer";
+>>>>>>> cae16ddeeb99adba77878b6d5477fa519cd8febf
 
 function App() {
 	return (
@@ -50,6 +54,7 @@ function App() {
 							}
 						/>
 					</Routes>
+					<Footer />
 				</Router>
 			</ThemeProvider>
 		</AuthProvider>
