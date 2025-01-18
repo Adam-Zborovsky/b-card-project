@@ -8,6 +8,7 @@ import "../../node_modules/bootstrap/dist/css/bootstrap.min.css";
 import { AuthContext } from "../context/AuthContext.js";
 import LoginModal from "./LoginModal.jsx";
 import { ThemeContext } from "../context/ThemeContext.js";
+import SearchBar from "../components/SearchBar.jsx";
 
 function Navbar() {
 	const { isAuthenticated, userData } = useContext(AuthContext);
@@ -77,18 +78,7 @@ function Navbar() {
 							)}
 						</button>
 						<div className="search-container">
-							<input
-								type="text"
-								className="form-inline mr-sm-2"
-								placeholder="Search"
-								style={{
-									color: theme === "light" ? "black" : "white",
-									backgroundColor: theme === "light" ? "white" : "black",
-									border: "none",
-									borderRadius: "5px",
-									height: "40px",
-								}}
-							/>
+							<SearchBar />
 							<button className="btn search-btn" type="submit">
 								<FaSearch />
 							</button>

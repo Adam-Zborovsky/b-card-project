@@ -80,6 +80,7 @@ html {
 }
 .card {
 	border-radius: 20px;
+	transition: transform 0.15s ease-in;
 }
 .card:hover {
 	transform: translateY(-10px);

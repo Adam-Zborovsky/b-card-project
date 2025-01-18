@@ -4,17 +4,27 @@ import { getAllCards, likeToggleCard } from "../services/cardService";
 import { ThemeContext } from "../context/ThemeContext";
 import { AuthContext } from "../context/AuthContext";
 import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
+import { SearchContext } from "../context/SearchContext";
 
 function Favorites() {
 	const { isAuthenticated, userData } = useContext(AuthContext);
 	const [cards, setCards] = useState([]);
 	const { theme } = useContext(ThemeContext);
+	const { searchTerm } = useContext(SearchContext);
+	const navigate = useNavigate();
 
 	useEffect(() => {
 		getAllCards()
-			.then((res) => setCards(res.data))
+			.then((res) =>
+				setCards(
+					res.data.filter((card) =>
+						card.title.toLowerCase().includes(searchTerm.toLowerCase())
+					)
+				)
+			)
 			.catch((err) => console.error(err));
-	}, []);
+	}, [searchTerm]);
 
 	const handleLike = (cardId) => {
 		likeToggleCard(cardId)
@@ -36,6 +46,7 @@ function Favorites() {
 			console.error("Failed to copy: ", err);
 		}
 	};
+	const handelCardClick = (id) => navigate("/card-details/" + id);
 
 	return (
 		<>
@@ -54,7 +65,11 @@ function Favorites() {
 							if (isLikedByUser) {
 								return (
 									<>
-										<div key={card._id} className="col">
+										<div
+											key={card._id}
+											className="col"
+											onClick={() => handelCardClick(card._id)}
+										>
 											<div
 												className="card h-100 shadow-lg border-0"
 												style={{

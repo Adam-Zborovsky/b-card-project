@@ -14,6 +14,8 @@ import { PiPlusBold } from "react-icons/pi";
 import CreateCardModal from "../components/createCardModal";
 import { toast } from "react-toastify";
 import ConfirmModal from "../components/confirmModal";
+import { useNavigate } from "react-router-dom";
+import SearchBar from "../components/SearchBar";
 
 function MyCards() {
 	const { isAuthenticated, userData } = useContext(AuthContext);
@@ -22,12 +24,20 @@ function MyCards() {
 	const [showNewCardModal, setShowNewCardModal] = useState(false);
 	const [showConfDelete, setShowConfDelete] = useState(false);
 	const { theme } = useContext(ThemeContext);
+	const { searchTerm } = useContext(SearchBar);
+	const navigate = useNavigate();
 
 	useEffect(() => {
 		getMyCards()
-			.then((res) => setCards(res.data))
+			.then((res) =>
+				setCards(
+					res.data.filter((card) =>
+						card.title.toLowerCase().includes(searchTerm.toLowerCase())
+					)
+				)
+			)
 			.catch((err) => console.error(err));
-	}, []);
+	}, [searchTerm]);
 
 	const handleLike = (cardId) => {
 		likeToggleCard(cardId)
@@ -80,6 +90,7 @@ function MyCards() {
 		}
 		setShowNewCardModal(false);
 	};
+	const handelCardClick = (id) => navigate("/card-details/" + id);
 
 	return (
 		<>
@@ -97,7 +108,11 @@ function MyCards() {
 								isAuthenticated && card.likes.includes(userData._id);
 
 							return (
-								<div key={card._id} className="col">
+								<div
+									key={card._id}
+									className="col"
+									onClick={() => handelCardClick(card._id)}
+								>
 									<div
 										className="card h-100 shadow-lg border-0"
 										style={{

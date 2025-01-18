@@ -13,6 +13,17 @@ export function getAllCards() {
 	return axios.request(config);
 }
 
+export function getCardById(id) {
+	let config = {
+		method: "get",
+		maxBodyLength: Infinity,
+		url: apiURL + id,
+		headers: {},
+	};
+
+	return axios.request(config);
+}
+
 export function getMyCards() {
 	let config = {
 		method: "get",

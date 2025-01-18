@@ -103,3 +103,16 @@ export function deleteUser(id) {
 
 	return axios.request(config);
 }
+
+export function patchBusinessStatus(id) {
+	let config = {
+		method: "patch",
+		maxBodyLength: Infinity,
+		url: apiURL + id,
+		headers: {
+			"x-auth-token": localStorage.getItem("token"),
+		},
+	};
+
+	return axios.request(config);
+}
