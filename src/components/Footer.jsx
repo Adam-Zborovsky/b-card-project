@@ -15,7 +15,10 @@ function Footer() {
 			} text-${
 				theme === "light" ? "dark" : "light"
 			} position-fixed bottom-0 w-100`}
-			style={{ boxShadow: "0px -2px 10px rgba(0, 0, 0, 0.1)", gap: "75px" }}
+			style={{
+				boxShadow: "0px -2px 10px rgba(0, 0, 0, 0.1)",
+				gap: "75px",
+			}}
 		>
 			<Link to="/" className="icon-link">
 				<FaHome size={25} />

@@ -167,8 +167,6 @@ function Profile() {
 				{isEditing ? (
 					<form onSubmit={formik.handleSubmit} className="register-form">
 						<h3 className="form-title">Register</h3>
-
-						{/* Personal Information */}
 						<div className="form-section">
 							<h4>Personal Information</h4>
 							<div className="form-grid">
@@ -195,7 +193,6 @@ function Profile() {
 							</div>
 						</div>
 
-						{/* Contact Information */}
 						<div className="form-section">
 							<h4>Contact Information</h4>
 							<div className="form-group">
@@ -241,7 +238,6 @@ function Profile() {
 							</div>
 						</div>
 
-						{/* Address Section */}
 						<div className="form-section">
 							<h4>Address Details</h4>
 							<div className="form-grid">
@@ -275,7 +271,6 @@ function Profile() {
 							</div>
 						</div>
 
-						{/* Image Section */}
 						<div className="form-section">
 							<h4>Profile Picture</h4>
 							<div className="form-grid">
@@ -313,7 +308,6 @@ function Profile() {
 							</div>
 						</div>
 
-						{/* Buttons */}
 						<div className="form-actions d-flex flex-row">
 							<button
 								type="submit"

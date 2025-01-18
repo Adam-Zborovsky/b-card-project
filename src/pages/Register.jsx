@@ -82,7 +82,6 @@ function Register() {
 			<form onSubmit={formik.handleSubmit} className="register-form">
 				<h3 className="form-title">Register</h3>
 
-				{/* Personal Information */}
 				<div className="form-section">
 					<h4>Personal Information</h4>
 					<div className="form-grid">
@@ -109,7 +108,6 @@ function Register() {
 					</div>
 				</div>
 
-				{/* Contact Information */}
 				<div className="form-section">
 					<h4>Contact Information</h4>
 					<div className="form-group">
@@ -155,7 +153,6 @@ function Register() {
 					</div>
 				</div>
 
-				{/* Address Section */}
 				<div className="form-section">
 					<h4>Address Details</h4>
 					<div className="form-grid">
@@ -184,7 +181,6 @@ function Register() {
 					</div>
 				</div>
 
-				{/* Image Section */}
 				<div className="form-section">
 					<h4>Profile Picture</h4>
 					<div className="form-grid">
@@ -218,7 +214,6 @@ function Register() {
 					</div>
 				</div>
 
-				{/* Business Checkbox */}
 				<div className="form-section">
 					<input
 						type="checkbox"
@@ -232,9 +227,12 @@ function Register() {
 					<label htmlFor="isBusiness">I Am A Business</label>
 				</div>
 
-				{/* Submit Button */}
 				<div className="form-actions">
-					<button type="submit" disabled={!(formik.dirty && formik.isValid)}>
+					<button
+						className="btn btn-success"
+						type="submit"
+						disabled={!(formik.dirty && formik.isValid)}
+					>
 						Register
 					</button>
 					<Link to="/login" className="secondary-link">

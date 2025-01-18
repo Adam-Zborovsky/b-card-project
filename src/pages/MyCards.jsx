@@ -15,7 +15,7 @@ import CreateCardModal from "../components/createCardModal";
 import { toast } from "react-toastify";
 import ConfirmModal from "../components/confirmModal";
 import { useNavigate } from "react-router-dom";
-import SearchBar from "../components/SearchBar";
+import { SearchContext } from "../context/SearchContext";
 
 function MyCards() {
 	const { isAuthenticated, userData } = useContext(AuthContext);
@@ -24,7 +24,7 @@ function MyCards() {
 	const [showNewCardModal, setShowNewCardModal] = useState(false);
 	const [showConfDelete, setShowConfDelete] = useState(false);
 	const { theme } = useContext(ThemeContext);
-	const { searchTerm } = useContext(SearchBar);
+	const { searchTerm } = useContext(SearchContext);
 	const navigate = useNavigate();
 
 	useEffect(() => {

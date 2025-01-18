@@ -3,12 +3,10 @@ import { Link } from "react-router-dom";
 import { FaSearch, FaMoon } from "react-icons/fa";
 import { CgProfile } from "react-icons/cg";
 import { IoIosSunny } from "react-icons/io";
-import "../../node_modules/bootstrap/dist/js/bootstrap.bundle.min.js";
-import "../../node_modules/bootstrap/dist/css/bootstrap.min.css";
 import { AuthContext } from "../context/AuthContext.js";
 import LoginModal from "./LoginModal.jsx";
 import { ThemeContext } from "../context/ThemeContext.js";
-import SearchBar from "../components/SearchBar.jsx";
+import SearchBar from "./SearchBar.jsx";
 
 function Navbar() {
 	const { isAuthenticated, userData } = useContext(AuthContext);

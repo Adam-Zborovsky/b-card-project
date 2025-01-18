@@ -27,10 +27,12 @@ html {
 	min-height: 100%;
 	background-color: var(--background);
 	color: var(--text);
+	padding-bottom: 125px;
 }
 .navbar {
 	background-color: var(--background);
 	color: var(--text);
+	padding-bottom: 125px;
 }
 .btn-primary {
 	background-color: var(--primary);

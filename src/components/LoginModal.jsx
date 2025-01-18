@@ -49,7 +49,6 @@ const LoginModal = () => {
 
 	return (
 		<div>
-			{/* Trigger Button */}
 			<button
 				className="btn btn-outline-primary mx-2"
 				onClick={toggleModal}
@@ -61,7 +60,6 @@ const LoginModal = () => {
 				Login
 			</button>
 
-			{/* Modal */}
 			{isModalOpen && (
 				<div
 					className="modal fade show d-block"
@@ -81,14 +79,13 @@ const LoginModal = () => {
 							maxWidth: "400px",
 							width: "90%",
 						}}
-						onClick={(e) => e.stopPropagation()} // Prevent closing modal on inner click
+						onClick={(e) => e.stopPropagation()}
 					>
 						<div
 							className={`modal-content rounded-3 ${
 								theme === "dark" ? "bg-dark text-light" : "bg-light text-dark"
 							}`}
 						>
-							{/* Modal Header */}
 							<div className="modal-header">
 								<h5 className="modal-title">Login</h5>
 								<button
@@ -102,10 +99,8 @@ const LoginModal = () => {
 								></button>
 							</div>
 
-							{/* Modal Body */}
 							<div className="modal-body p-4">
 								<form onSubmit={formik.handleSubmit}>
-									{/* Email Field */}
 									<div className="mb-3">
 										<label htmlFor="email" className="form-label">
 											Email
@@ -137,7 +132,6 @@ const LoginModal = () => {
 										)}
 									</div>
 
-									{/* Password Field */}
 									<div className="mb-3">
 										<label htmlFor="password" className="form-label">
 											Password
@@ -169,7 +163,6 @@ const LoginModal = () => {
 										)}
 									</div>
 
-									{/* Submit Button */}
 									<button
 										type="submit"
 										className="btn w-100 py-2"
@@ -182,7 +175,6 @@ const LoginModal = () => {
 										Login
 									</button>
 
-									{/* Register Link */}
 									<div className="text-center mt-3">
 										<Link
 											to="/register"
@@ -196,7 +188,6 @@ const LoginModal = () => {
 								</form>
 							</div>
 
-							{/* Modal Footer */}
 							<div className="modal-footer border-0">
 								<button
 									className="btn btn-secondary w-100"
