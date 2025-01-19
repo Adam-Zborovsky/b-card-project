@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const apiURL = "https://monkfish-app-z9uza.ondigitalocean.app/bcard2/cards/";
+const apiURL = "https://b-card-server.onrender.com/cards/";
 
 export function getAllCards() {
 	let config = {

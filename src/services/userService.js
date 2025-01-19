@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const apiURL = "https://monkfish-app-z9uza.ondigitalocean.app/bcard2/users/";
+const apiURL = "https://b-card-server.onrender.com/users/";
 
 export function loginUser(user) {
 	let config = {

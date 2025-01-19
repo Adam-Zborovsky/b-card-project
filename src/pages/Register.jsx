@@ -68,6 +68,8 @@ function Register() {
 		onSubmit: (values) => {
 			registerUser(values)
 				.then((res) => {
+					console.log(res.data);
+
 					if (res.data) {
 						login(res.data);
 						navigate("/");
