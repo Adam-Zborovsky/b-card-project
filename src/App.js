@@ -17,6 +17,7 @@ import Footer from "./components/Footer";
 import Sandbox from "./pages/Sandbox";
 import CardDetails from "./pages/CardDetails";
 import { SearchProvider } from "./context/SearchContext";
+import NotFound from "./pages/NotFound.jsx";
 
 function App() {
 	return (
@@ -47,17 +48,7 @@ function App() {
 							<Route path="/sandbox" element={<Sandbox />} />
 							<Route path="/register" element={<Register />} />
 							<Route path="/profile" element={<Profile />} />
-							<Route
-								path="*"
-								element={
-									<h1
-										className="container d-flex justify-content-center vh-100"
-										style={{ color: "var(--error)" }}
-									>
-										Page Not Found
-									</h1>
-								}
-							/>
+							<Route path="*" element={<NotFound />} />
 						</Routes>
 						<Footer />
 					</Router>
