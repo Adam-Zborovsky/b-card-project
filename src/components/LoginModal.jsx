@@ -9,7 +9,7 @@ import { toast } from "react-toastify";
 
 const LoginModal = () => {
 	const { login } = useContext(AuthContext);
-	const { theme } = useContext(ThemeContext); // Access theme context
+	const { theme } = useContext(ThemeContext);
 	const navigate = useNavigate();
 	const [isModalOpen, setIsModalOpen] = useState(false);
 
